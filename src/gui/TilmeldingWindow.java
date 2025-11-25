@@ -7,16 +7,16 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import model.Hotel;
-import model.HotelService;
-import model.Konference;
-import model.Udflugt;
+import model.*;
+
+import java.util.ArrayList;
 
 public class TilmeldingWindow extends Stage {
 
 
-    private Controller controller;
-
+    private final Controller controller;
+    private final ArrayList<CheckBox> udflugtCheckBoxes = new ArrayList<>();
+    private final ArrayList<CheckBox> serviceCheckBoxes = new ArrayList<>();
 
     public TilmeldingWindow(Controller controller) {
         this.controller = controller;
@@ -170,8 +170,9 @@ public class TilmeldingWindow extends Stage {
 
             cmbHotel.setOnAction(event -> {
                 Hotel hotel = cmbHotel.getValue();
-                serviceBox.getChildren().clear();
 
+                serviceBox.getChildren().clear();
+                serviceCheckBoxes.clear();
                 if (hotel != null) {
                     lblServices.setVisible(true);
                     serviceBox.setVisible(true);
@@ -180,14 +181,18 @@ public class TilmeldingWindow extends Stage {
                         CheckBox cb = new CheckBox(hotelService.getNavn() + " (" + hotelService.getPris() + " kr)");
                         cb.setUserData(hotelService);
                         serviceBox.getChildren().add(cb);
+                        serviceCheckBoxes.add(cb);
                     }
                 }
             });
 
             udflugtBox.getChildren().clear();
+            udflugtCheckBoxes.clear();
+
             for (Udflugt udflugt : valgt.getUdflugter()) {
                 CheckBox cb = new CheckBox(udflugt.getNavn() + " (" + udflugt.getPris() + " kr.)");
                 cb.setUserData(udflugt);
+                udflugtCheckBoxes.add(cb);
                 udflugtBox.getChildren().add(cb);
             }
         });
@@ -197,7 +202,83 @@ public class TilmeldingWindow extends Stage {
         pane.add(btnTilmeld,1, 20);
         btnTilmeld.setOnAction(e -> {
 
+            if (txfNavn.getText().isEmpty() || txfAdresse.getText().isEmpty() ||
+                    txfNationalitet.getText().isEmpty() || txfTelefon.getText().isEmpty()) {
+                showAlert("Fejl", "Udfyld nødvendige tekstfelter.");
+                return;
+            }
+            if (cmbKonference.getValue() == null) {
+                showAlert("Fejl", "Vælg en konference.");
+                return;
+            }
+            if (dpAnkomst.getValue() == null || dpAfrejse.getValue() == null) {
+                showAlert("Fejl", "Vælg ankomst- og afrejsedato.");
+                return;
+            }
+
+
+            String firmanavn = chkFirma.isSelected() ? txfFirmanavn.getText() : "";
+            String firmatlf = chkFirma.isSelected() ? txfFirmatlf.getText() : "";
+
+            Deltager deltager = controller.createDeltager(txfNavn.getText(), txfAdresse.getText(),
+                    txfNationalitet.getText(), txfTelefon.getText(), firmanavn, firmatlf);
+
+
+            Konference konference = cmbKonference.getValue();
+
+            boolean erForedragsholder = chkForedrag.isSelected();
+
+            Tilmelding tilmelding = controller.createTilmelding(konference, deltager, dpAnkomst.getValue(),
+                    dpAfrejse.getValue(), erForedragsholder);
+
+
+            // Opretter ledsager:
+            Ledsager ledsager = null;
+
+            if (chkLedsager.isSelected()) {
+                if (txfLedsager.getText().isEmpty()) {
+                    showAlert("Fejl", "Indtast ledsagerens navn eller fjern afkrydsning.");
+                    return;
+                }
+                ledsager = controller.createLedsager(tilmelding, txfLedsager.getText());
+            }
+
+
+            if (ledsager != null) {
+                for (CheckBox cb : udflugtCheckBoxes) {
+                    if (cb.isSelected()) {
+                        Udflugt udflugt = (Udflugt) cb.getUserData();
+                        udflugt.addTilmelding(new UdflugtTilmelding(ledsager, udflugt));
+                    }
+                }
+            }
+
+            if (cmbHotel.getValue() != null) {
+                Hotel hotel = cmbHotel.getValue();
+                Værelsestype værelsestype = chkLedsager.isSelected() ? Værelsestype.DOBBELT : Værelsestype.ENKELT;
+
+                HotelReservation reservation = controller.createReservation(tilmelding, værelsestype, hotel);
+
+                for (CheckBox cb : serviceCheckBoxes) {
+                    if (cb.isSelected()) {
+                        HotelService hotelService = (HotelService) cb.getUserData();
+                        reservation.addService(hotelService);
+                    }
+                }
+            }
+
+            showAlert("Tilmelding oprettet", "Tilmelding for " + deltager.getNavn() + " er blevet oprettet.");
+
         });
 
+
+    }
+
+    private void showAlert(String title, String msg) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(msg);
+        alert.showAndWait();
     }
 }

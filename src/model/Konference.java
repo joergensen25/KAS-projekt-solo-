@@ -41,6 +41,10 @@ public class Konference {
         return hotel;
     }
 
+    public String getNavn() {
+        return navn;
+    }
+
     public ArrayList<Hotel> getHoteller() {
         return hoteller;
     }

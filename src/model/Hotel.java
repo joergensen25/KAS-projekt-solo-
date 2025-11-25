@@ -28,6 +28,10 @@ public class Hotel {
         return services;
     }
 
+    public String getNavn() {
+        return navn;
+    }
+
     @Override
     public String toString() {
         return navn +

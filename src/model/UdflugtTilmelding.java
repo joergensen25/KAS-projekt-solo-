@@ -1,12 +1,10 @@
 package model;
 
 public class UdflugtTilmelding {
-    private int id;
     private Ledsager ledsager;
     private Udflugt udflugt;
 
-    public UdflugtTilmelding(int id, Ledsager ledsager, Udflugt udflugt) {
-        this.id = id;
+    public UdflugtTilmelding(Ledsager ledsager, Udflugt udflugt) {
         this.ledsager = ledsager;
         this.udflugt = udflugt;
 

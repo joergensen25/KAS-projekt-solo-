@@ -27,4 +27,8 @@ public class Deltager {
         tilmeldinger.add(tilmelding);
     }
 
+
+    public String getNavn() {
+        return navn;
+    }
 }

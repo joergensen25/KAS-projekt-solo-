@@ -42,7 +42,7 @@ public class MainWindow extends Application {
         pane.add(btnAdmin, 0, 2);
 
         btnTilmeld.setOnAction(e -> new TilmeldingWindow(controller));
-        btnOpretKonf.setOnAction(e -> new KonferenceWindow());
+        btnOpretKonf.setOnAction(e -> new KonferenceWindow(controller));
         btnAdmin.setOnAction(e -> new OversigtWindow());
 
     }
