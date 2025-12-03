@@ -22,4 +22,9 @@ public class HotelService {
     public double getPris() {
         return pris;
     }
+
+    @Override
+    public String toString() {
+        return navn + " ("+ beskrivelse + "), " + pris + " kr.";
+    }
 }

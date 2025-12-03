@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Hotel;
 import model.Konference;
@@ -103,8 +104,7 @@ public class TilføjHotelWindow extends Stage {
                 return;
             }
 
-            new TilføjServiceWindow(controller, valgtHotel);
-            this.close();
+            new TilføjServiceWindow(controller, valgtHotel, this);
         });
 
         btnSkip.setOnAction(e -> {

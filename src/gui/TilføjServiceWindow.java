@@ -3,11 +3,9 @@ package gui;
 import controller.Controller;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.Hotel;
 import model.HotelService;
@@ -16,12 +14,16 @@ public class TilføjServiceWindow extends Stage {
 
     private Controller controller;
     private Hotel hotel;
+    private ListView<HotelService> lvwServices = new ListView<>();
 
-    public TilføjServiceWindow(Controller controller, Hotel hotel) {
+    public TilføjServiceWindow(Controller controller, Hotel hotel, Stage parentWindow) {
         this.controller = controller;
         this.hotel = hotel;
 
         setTitle("Tilføj service til " + hotel.getNavn());
+
+        initModality(Modality.APPLICATION_MODAL);
+        initOwner(parentWindow);
 
         GridPane pane = new GridPane();
         pane.setPadding(new Insets(20));
@@ -52,8 +54,17 @@ public class TilføjServiceWindow extends Stage {
         pane.add(lblBeskrivelse, 0, 3);
         pane.add(txfBeskrivelse, 0, 4, 2, 1);
 
+
+
         Button btnTilføj = new Button("Tilføj service");
         pane.add(btnTilføj, 1, 5);
+
+        Label lblServices = new Label("Services tilknyttet hotellet:");
+        lvwServices.setPrefWidth(150);
+        pane.add(lblServices, 0, 6);
+        pane.add(lvwServices, 0, 7, 2, 1);
+
+        lvwServices.getItems().setAll(hotel.getServices());
 
         btnTilføj.setOnAction(e -> {
 
@@ -75,8 +86,13 @@ public class TilføjServiceWindow extends Stage {
 
             hotel.addService(service);
 
+            lvwServices.getItems().add(service);
+
+            txfBeskrivelse.clear();
+            txfNavn.clear();
+            txfPris.clear();
+
             showAlert("Succes", "Servicen er tilføjet til hotellet");
-            this.close();
         });
 
     }

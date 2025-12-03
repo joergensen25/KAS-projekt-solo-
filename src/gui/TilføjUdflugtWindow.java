@@ -3,25 +3,25 @@ package gui;
 import controller.Controller;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import model.Hotel;
 import model.Konference;
+import model.Udflugt;
 
 public class TilføjUdflugtWindow extends Stage {
 
     private Controller controller;
     private Konference konference;
 
+    private ListView<Udflugt> lvwUdflugter = new ListView<>();
+
     public TilføjUdflugtWindow(Controller controller, Konference konference) {
         this.controller = controller;
         this.konference = konference;
 
-        setTitle("Tilføj service til ");
+        setTitle("Tilføj udflugter til " + konference.getNavn());
 
         GridPane pane = new GridPane();
         pane.setPadding(new Insets(20));
@@ -58,9 +58,65 @@ public class TilføjUdflugtWindow extends Stage {
         pane.add(dpDato, 0, 6);
 
         Button btnTilføj = new Button("Tilføj udflugt");
-        pane.add(btnTilføj, 1, 7);;
+        pane.add(btnTilføj, 1, 6);;
+
+        lvwUdflugter.setPrefHeight(150);
+        Label lblUdflugter = new Label("Udflugter tilknyttet konferencen:");
+        pane.add(lblUdflugter, 0, 7);
+        pane.add(lvwUdflugter,0,8, 2, 1);
+
+        Button btnTilbage = new Button("<-- Gå tilbage");
+        pane.add(btnTilbage, 0, 9);
+
+        Button btnAfslut = new Button("Afslut");
+        pane.add(btnAfslut, 1, 9);
+
+
+        btnTilføj.setOnAction(e -> {
+
+            if (txfNavn.getText().isEmpty() || txfBeskrivelse.getText().isEmpty() ||
+                    txfPris.getText().isEmpty() || dpDato.getValue() == null) {
+
+                showAlert("Fejl", "Udfyld venligst alle felter.");
+                return;
+            }
+
+            double pris;
+            try {
+                pris = Double.parseDouble(txfPris.getText());
+            } catch (NumberFormatException exception) {
+                showAlert("Fejl", "Pris skal være et tal.");
+                return;
+            }
+
+            Udflugt udflugt = controller.createUdflugt(konference, txfNavn.getText(),
+                    txfBeskrivelse.getText(), pris, dpDato.getValue());
+
+            lvwUdflugter.getItems().add(udflugt);
+
+            txfNavn.clear();
+            txfBeskrivelse.clear();
+            txfPris.clear();
+            dpDato.setValue(null);
+        });
+
+        btnAfslut.setOnAction(e -> {
+            showAlert("Succes", "Konferencen er oprettet.");
+
+
+            this.close();
+        });
 
 
 
     }
+    private void showAlert(String title, String msg) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(msg);
+        alert.showAndWait();
+    }
+
+
 }

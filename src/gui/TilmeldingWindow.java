@@ -268,6 +268,14 @@ public class TilmeldingWindow extends Stage {
             }
 
             showAlert("Tilmelding oprettet", "Tilmelding for " + deltager.getNavn() + " er blevet oprettet.");
+            dpAfrejse.setValue(null);
+            dpAnkomst.setValue(null);
+            chkLedsager.setSelected(false);
+            txfLedsager.clear();
+            txfLedsager.setVisible(false);
+            chkForedrag.setSelected(false);
+
+
 
         });
 
