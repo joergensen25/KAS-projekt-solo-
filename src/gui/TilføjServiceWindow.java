@@ -59,6 +59,9 @@ public class TilføjServiceWindow extends Stage {
         Button btnTilføj = new Button("Tilføj service");
         pane.add(btnTilføj, 1, 5);
 
+        Button btnFjern = new Button("Fjern service");
+        pane.add(btnFjern, 0, 5);
+
         Label lblServices = new Label("Services tilknyttet hotellet:");
         lvwServices.setPrefWidth(150);
         pane.add(lblServices, 0, 6);
@@ -93,6 +96,20 @@ public class TilføjServiceWindow extends Stage {
             txfPris.clear();
 
             showAlert("Succes", "Servicen er tilføjet til hotellet");
+        });
+
+        btnFjern.setOnAction(e -> {
+            HotelService valgt = lvwServices.getSelectionModel().getSelectedItem();
+
+            if (valgt == null) {
+                showAlert("Fejl", "Ingen service valgt.");
+                return;
+            }
+
+            hotel.getServices().remove(valgt);
+
+            lvwServices.getItems().setAll(hotel.getServices());
+
         });
 
     }

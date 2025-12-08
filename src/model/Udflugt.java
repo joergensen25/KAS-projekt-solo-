@@ -37,9 +37,6 @@ public class Udflugt {
 
     @Override
     public String toString() {
-        return "Udflugt{" +
-                "navn='" + navn + '\'' +
-                ", pris=" + pris +
-                '}';
+        return navn + " (" + pris + " kr.)";
     }
 }

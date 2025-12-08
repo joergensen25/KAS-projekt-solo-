@@ -64,6 +64,7 @@ public class TilføjUdflugtWindow extends Stage {
         Label lblUdflugter = new Label("Udflugter tilknyttet konferencen:");
         pane.add(lblUdflugter, 0, 7);
         pane.add(lvwUdflugter,0,8, 2, 1);
+        lvwUdflugter.getItems().setAll(konference.getUdflugter());
 
         Button btnTilbage = new Button("<-- Gå tilbage");
         pane.add(btnTilbage, 0, 9);
@@ -104,6 +105,11 @@ public class TilføjUdflugtWindow extends Stage {
             showAlert("Succes", "Konferencen er oprettet.");
 
 
+            this.close();
+        });
+
+        btnTilbage.setOnAction(e -> {
+            new TilføjHotelWindow(controller, konference);
             this.close();
         });
 

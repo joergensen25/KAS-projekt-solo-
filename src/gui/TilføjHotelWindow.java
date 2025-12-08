@@ -58,11 +58,15 @@ public class TilføjHotelWindow extends Stage {
         Button btnTilføjHotel = new Button("Tilføj hotel");
         pane.add(btnTilføjHotel, 1, 5);
 
+        Button btnFjernHotel = new Button("Fjern hotel");
+        pane.add(btnFjernHotel, 0, 5);
+
         Label lblHotel = new Label("Hoteller tilknyttet konferencen:");
         pane.add(lblHotel, 0, 6);
 
         lvwHoteller.setPrefWidth(150);
         pane.add(lvwHoteller, 0, 7, 2, 1);
+        lvwHoteller.getItems().setAll(konference.getHoteller());
 
         Button btnService = new Button("Tilføj service til valgt hotel");
         pane.add(btnService, 0, 8);
@@ -94,6 +98,20 @@ public class TilføjHotelWindow extends Stage {
             txfNavn.clear();
             txfEnkelt.clear();
             txfDobbelt.clear();
+        });
+
+        btnFjernHotel.setOnAction(e -> {
+            Hotel valgt = lvwHoteller.getSelectionModel().getSelectedItem();
+
+            if (valgt == null) {
+                showAlert("Fejl", "Intet hotel valgt.");
+                return;
+            }
+
+            konference.getHoteller().remove(valgt);
+
+            lvwHoteller.getItems().setAll(konference.getHoteller());
+
         });
 
         btnService.setOnAction(e -> {
