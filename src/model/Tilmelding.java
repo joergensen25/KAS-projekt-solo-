@@ -40,4 +40,20 @@ public class Tilmelding {
     public int getAntalDage() {
         return (int) (afrejsedato.toEpochDay() - ankomstdato.toEpochDay());
     }
+
+    public Deltager getDeltager() {
+        return deltager;
+    }
+
+    public LocalDate getAnkomstdato() {
+        return ankomstdato;
+    }
+
+    public LocalDate getAfrejsedato() {
+        return afrejsedato;
+    }
+
+    public Ledsager getLedsager() {
+        return ledsager;
+    }
 }

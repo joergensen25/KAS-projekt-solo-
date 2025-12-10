@@ -76,7 +76,7 @@ public class MainWindow extends Application {
 
         btnTilmeld.setOnAction(e -> new TilmeldingWindow(controller));
         btnOpretKonf.setOnAction(e -> new KonferenceWindow(controller));
-        btnAdmin.setOnAction(e -> new OversigtWindow());
+        btnAdmin.setOnAction(e -> new OversigtWindow(controller));
 
     }
 

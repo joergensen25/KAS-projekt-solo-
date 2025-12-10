@@ -21,7 +21,7 @@ public class TilføjUdflugtWindow extends Stage {
         this.controller = controller;
         this.konference = konference;
 
-        setTitle("Tilføj udflugter til " + konference.getNavn());
+        setTitle("Tilføj udflugter til " + konference.getNavn() + " (" + konference.getStartdato() + "-" + konference.getSlutDato() + ")");
 
         GridPane pane = new GridPane();
         pane.setPadding(new Insets(20));

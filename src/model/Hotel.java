@@ -32,6 +32,10 @@ public class Hotel {
         return navn;
     }
 
+    public ArrayList<HotelReservation> getReservationer() {
+        return reservationer;
+    }
+
     @Override
     public String toString() {
         return navn +

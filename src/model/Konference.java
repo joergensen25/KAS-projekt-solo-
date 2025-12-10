@@ -54,6 +54,18 @@ public class Konference {
         return udflugter;
     }
 
+    public LocalDate getStartdato() {
+        return startdato;
+    }
+
+    public LocalDate getSlutDato() {
+        return slutDato;
+    }
+
+    public ArrayList<Tilmelding> getTilmeldinger() {
+        return tilmeldinger;
+    }
+
     @Override
     public String toString() {
         return navn +

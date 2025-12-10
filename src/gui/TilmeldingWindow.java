@@ -32,6 +32,8 @@ public class TilmeldingWindow extends Stage {
 
         Scene scene = new Scene(pane);
         setScene(scene);
+        sizeToScene();
+
         show();
     }
 
@@ -137,6 +139,7 @@ public class TilmeldingWindow extends Stage {
         lblServices.setVisible(false);
         serviceBox.setVisible(false);
 
+
         pane.add(lblServices, 1, 16);
         pane.add(serviceBox, 1, 17);
 
@@ -159,6 +162,8 @@ public class TilmeldingWindow extends Stage {
                 lblUdflugter.setVisible(ledsager);
                 udflugtBox.setVisible(ledsager);
 
+                sizeToScene();
+
         });
 
         cmbKonference.setOnAction(e -> {
@@ -177,6 +182,7 @@ public class TilmeldingWindow extends Stage {
                     lblServices.setVisible(true);
                     serviceBox.setVisible(true);
 
+
                     for (HotelService hotelService : hotel.getServices()) {
                         CheckBox cb = new CheckBox(hotelService.getNavn() + " (" + hotelService.getPris() + " kr)");
                         cb.setUserData(hotelService);
@@ -184,6 +190,7 @@ public class TilmeldingWindow extends Stage {
                         serviceCheckBoxes.add(cb);
                     }
                 }
+                sizeToScene();
             });
 
             udflugtBox.getChildren().clear();
@@ -195,6 +202,7 @@ public class TilmeldingWindow extends Stage {
                 udflugtCheckBoxes.add(cb);
                 udflugtBox.getChildren().add(cb);
             }
+            sizeToScene();
         });
 
 

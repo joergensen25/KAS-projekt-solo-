@@ -31,12 +31,20 @@ public class Udflugt {
         return pris;
     }
 
+    public LocalDate getDato() {
+        return dato;
+    }
+
+    public ArrayList<UdflugtTilmelding> getTilmeldinger() {
+        return tilmeldinger;
+    }
+
     public void addTilmelding(UdflugtTilmelding udflugtTilmelding) {
         tilmeldinger.add(udflugtTilmelding);
     }
 
     @Override
     public String toString() {
-        return navn + " (" + pris + " kr.)";
+        return navn + " (" + pris + " kr.) " + dato;
     }
 }

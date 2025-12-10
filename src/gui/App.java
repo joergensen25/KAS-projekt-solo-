@@ -2,6 +2,7 @@ package gui;
 
 import controller.Controller;
 import javafx.application.Application;
+import model.Udflugt;
 
 public class App {
 

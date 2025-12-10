@@ -14,6 +14,14 @@ public class Ledsager {
         this.tilmelding = tilmelding;
     }
 
+    public String getNavn() {
+        return navn;
+    }
+
+    public Tilmelding getTilmelding() {
+        return tilmelding;
+    }
+
     public void addUdflugtTilmelding(UdflugtTilmelding udflugtTilmelding) {
         udflugtTilmeldinger.add(udflugtTilmelding);
     }

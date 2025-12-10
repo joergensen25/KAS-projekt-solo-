@@ -31,4 +31,8 @@ public class Deltager {
     public String getNavn() {
         return navn;
     }
+
+    public String getTelefon() {
+        return telefon;
+    }
 }

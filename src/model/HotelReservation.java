@@ -17,6 +17,10 @@ public class HotelReservation {
         this.tilmelding = tilmelding;
     }
 
+    public Tilmelding getTilmelding() {
+        return tilmelding;
+    }
+
     public void addService(HotelService hotelService) {
         services.add(hotelService);
     }

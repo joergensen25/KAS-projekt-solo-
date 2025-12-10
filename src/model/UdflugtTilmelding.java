@@ -8,10 +8,9 @@ public class UdflugtTilmelding {
         this.ledsager = ledsager;
         this.udflugt = udflugt;
 
-        ledsager.addUdflugtTilmelding(this);
-
-        udflugt.addTilmelding(this);
     }
 
-
+    public Ledsager getLedsager() {
+        return ledsager;
+    }
 }
