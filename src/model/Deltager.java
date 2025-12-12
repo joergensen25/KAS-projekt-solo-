@@ -35,4 +35,8 @@ public class Deltager {
     public String getTelefon() {
         return telefon;
     }
+
+    public String getAdresse() {
+        return adresse;
+    }
 }

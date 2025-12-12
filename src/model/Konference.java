@@ -66,6 +66,10 @@ public class Konference {
         return tilmeldinger;
     }
 
+    public double getDagspris() {
+        return dagspris;
+    }
+
     @Override
     public String toString() {
         return navn +

@@ -22,6 +22,10 @@ public class Ledsager {
         return tilmelding;
     }
 
+    public ArrayList<UdflugtTilmelding> getUdflugtTilmeldinger() {
+        return udflugtTilmeldinger;
+    }
+
     public void addUdflugtTilmelding(UdflugtTilmelding udflugtTilmelding) {
         udflugtTilmeldinger.add(udflugtTilmelding);
     }

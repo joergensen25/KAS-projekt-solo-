@@ -24,6 +24,10 @@ public class Hotel {
         services.add(hotelService);
     }
 
+    public void addReservation(HotelReservation hotelReservation) {
+        reservationer.add(hotelReservation);
+    }
+
     public ArrayList<HotelService> getServices() {
         return services;
     }
@@ -34,6 +38,14 @@ public class Hotel {
 
     public ArrayList<HotelReservation> getReservationer() {
         return reservationer;
+    }
+
+    public double getPrisEnkelt() {
+        return prisEnkelt;
+    }
+
+    public double getPrisDobbelt() {
+        return prisDobbelt;
     }
 
     @Override

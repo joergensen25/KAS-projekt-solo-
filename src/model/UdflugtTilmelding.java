@@ -13,4 +13,8 @@ public class UdflugtTilmelding {
     public Ledsager getLedsager() {
         return ledsager;
     }
+
+    public Udflugt getUdflugt() {
+        return udflugt;
+    }
 }

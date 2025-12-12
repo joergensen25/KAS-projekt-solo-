@@ -4,6 +4,7 @@ import model.*;
 import storage.Storage;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class Controller {
 
@@ -101,6 +102,35 @@ public class Controller {
         return tilmelding.createReservation(værelsestype, hotel);
     }
 
+    public Deltager findDeltagerByName(String navn) {
+        if (navn == null || navn.isBlank()) {
+            return null;
+        }
+
+        for (Deltager d : storage.getDeltagere()) {
+            if (d.getNavn().equalsIgnoreCase(navn)) {
+                return d;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Tilmelding> getTilmeldingerFor(Deltager deltager) {
+        ArrayList<Tilmelding> result = new ArrayList<>();
+
+        if (deltager == null) {
+            return result;
+        }
+
+        for (Konference k : storage.getKonferencer()) {
+            for (Tilmelding t : k.getTilmeldinger()) {
+                if (t.getDeltager().equals(deltager)) {
+                    result.add(t);
+                }
+            }
+        }
+        return result;
+    }
 
 
 

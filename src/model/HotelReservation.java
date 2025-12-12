@@ -17,8 +17,28 @@ public class HotelReservation {
         this.tilmelding = tilmelding;
     }
 
+
+
     public Tilmelding getTilmelding() {
         return tilmelding;
+    }
+
+    public Værelsestype getVærelsestype() {
+        return værelsestype;
+    }
+
+    public ArrayList<HotelService> getServices() {
+        return services;
+    }
+
+    public double getPris() {
+        double pris = (værelsestype == Værelsestype.DOBBELT) ? hotel.getPrisDobbelt() : hotel.getPrisEnkelt();
+
+        for (HotelService s : services) {
+            pris += s.getPris();
+        }
+
+        return pris;
     }
 
     public void addService(HotelService hotelService) {

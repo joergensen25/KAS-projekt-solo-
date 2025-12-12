@@ -1,6 +1,8 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 
 public class Tilmelding {
     private Deltager deltager;
@@ -14,6 +16,7 @@ public class Tilmelding {
 
     private Ledsager ledsager;
     private HotelReservation reservation;
+    private ArrayList<HotelReservation> reservationer = new ArrayList<>();
 
     public Tilmelding(Deltager deltager, Konference konference, LocalDate ankomstdato,
                       LocalDate afrejsedato, boolean erForedragsholder) {
@@ -34,6 +37,10 @@ public class Tilmelding {
     public HotelReservation createReservation(Værelsestype værelsestype, Hotel hotel) {
         HotelReservation hotelReservation = new HotelReservation(værelsestype, hotel, this);
         this.reservation = hotelReservation;
+
+        reservationer.add(hotelReservation);
+        hotel.addReservation(hotelReservation);
+
         return hotelReservation;
     }
 
@@ -56,4 +63,29 @@ public class Tilmelding {
     public Ledsager getLedsager() {
         return ledsager;
     }
+
+    public Konference getKonference() {
+        return konference;
+    }
+
+    public double getTotalPris() {
+        double total = 0;
+
+        if (!erForedragsholder) {
+            long antalDage = ChronoUnit.DAYS.between(ankomstdato, afrejsedato);
+            total += antalDage * konference.getDagspris();
+        }
+
+        if (reservation != null) {
+            total += reservation.getPris();
+        }
+
+        if (ledsager != null) {
+            for (UdflugtTilmelding ut : ledsager.getUdflugtTilmeldinger()) {
+                total += ut.getUdflugt().getPris();
+            }
+        }
+        return total;
+    }
 }
+

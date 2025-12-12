@@ -71,11 +71,11 @@ public class OversigtWindow extends Stage {
         Label lblSøg = new Label("Søg efter deltager");
         TextField txfSøg = new TextField();
         Button btnSøg = new Button("Søg");
+        btnSøg.setOnAction(e -> søgDeltager(txfSøg.getText()));
 
         pane.add(lblSøg, 1, 1);
         pane.add(txfSøg, 1, 2);
         pane.add(btnSøg, 1, 3);
-
 
     }
 
@@ -118,22 +118,6 @@ public class OversigtWindow extends Stage {
         txaResultat.setText(sb.toString());
     }
 
-//    private void visUdflugtOversigt(Konference k) {
-//        StringBuilder sb = new StringBuilder();
-//
-//        sb.append("Udflugtoversigt for ").append(k.getNavn()).append(":\n\n");
-//
-//        for (Udflugt u : k.getUdflugter()) {
-//            sb.append(u.getNavn()).append(" - ").append(u.getDato()).append(":\n");
-//
-//            for (UdflugtTilmelding ut : u.getTilmeldinger()) {
-//                sb.append(" - ").append(ut.getLedsager().getNavn()).append(" (Ledsager til: ")
-//                        .append(ut.getLedsager().getTilmelding().getDeltager().getNavn()).append(")\n");
-//            }
-//        }
-//        txaResultat.setText(sb.toString());
-//    }
-
     private void visUdflugtOversigt(Konference k) {
         StringBuilder sb = new StringBuilder();
         sb.append("Udflugtoversigt:\n\n");
@@ -155,18 +139,83 @@ public class OversigtWindow extends Stage {
 
     private void visHotelOversigt(Konference k) {
         StringBuilder sb = new StringBuilder();
-        sb.append("Hoteloversigt:\n\n");
+        sb.append("Hoteloversigt for: ").append(k.getNavn()).append("\n\n");
 
         for (Hotel h : k.getHoteller()) {
-            sb.append(h.getNavn()).append(":\n");
+            sb.append("Hotel: ").append(h.getNavn()).append(":\n");
+            sb.append("-----------------------------------\n");
+
+            if (h.getReservationer().isEmpty()) {
+                sb.append("Ingen reservationer\n\n");
+                continue;
+            }
 
             for (HotelReservation hr : h.getReservationer()) {
-                sb.append(" - Deltager ")
-                        .append(hr.getTilmelding().getDeltager().getNavn()).append(" og ledsager ").append(hr.getTilmelding().getLedsager())
-                        .append(" (tlf. ").append(hr.getTilmelding().getDeltager().getTelefon()).append(")\n");
+
+                Tilmelding t = hr.getTilmelding();
+                Deltager d = t.getDeltager();
+                Ledsager l = t.getLedsager();
+
+                sb.append("- Deltager: ").append(d.getNavn()).append("\n");
+                sb.append(" Telefon: ").append(d.getTelefon()).append("\n");
+
+                sb.append(" Værelse: ");
+                if (hr.getVærelsestype() == Værelsestype.DOBBELT) {
+                    sb.append("Dobbeltværelse\n");
+                } else {
+                    sb.append("Enkeltværelse\n");
+                }
+
+                sb.append(" Ophold: ")
+                        .append(t.getAnkomstdato())
+                        .append(" til ")
+                        .append(t.getAfrejsedato())
+                        .append("\n");
+
+                if (l != null) {
+                    sb.append(" Ledsager: ").append(l.getNavn()).append("\n");
+                } else {
+                    sb.append(" Ledsager: Ingen\n");
+                }
+
+                if (hr.getServices().isEmpty()) {
+                    sb.append(" Services: Ingen\n");
+                } else {
+                    sb.append(" Services: ");
+                    for (int i = 0; i < hr.getServices().size(); i++) {
+                        sb.append(hr.getServices().get(i).getNavn());
+                        if (i < hr.getServices().size() - 1) {
+                            sb.append(", ");
+                        }
+                    }
+                    sb.append("\n");
+                }
+                sb.append("\n");
             }
             sb.append("\n");
         }
+        txaResultat.setText(sb.toString());
+    }
+
+    private void søgDeltager(String navn) {
+        Deltager fundet = controller.findDeltagerByName(navn);
+
+        if (fundet == null) {
+            txaResultat.setText("Ingen deltager fundet.");
+            return;
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("Deltagerinfo:\n");
+        sb.append(fundet.getNavn()).append("\n");
+        sb.append("Adresse: ").append(fundet.getAdresse()).append("\n");
+        sb.append("Telefon: ").append(fundet.getTelefon()).append("\n\n");
+
+        sb.append("Tilmeldinger:\n");
+        for (Tilmelding t : controller.getTilmeldingerFor(fundet)) {
+            sb.append("- ").append(t.getKonference().getNavn())
+                    .append(": ").append(t.getTotalPris()).append(" kr\n");
+        }
+
         txaResultat.setText(sb.toString());
     }
 
